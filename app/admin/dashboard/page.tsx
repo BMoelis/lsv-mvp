@@ -33,39 +33,27 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        // Log environment variables (excluding sensitive values)
-        console.log('Form ID exists:', !!process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID)
-        console.log('API Key exists:', !!process.env.NEXT_PUBLIC_FORMSPREE_API_KEY)
+        const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID
+        const apiKey = process.env.NEXT_PUBLIC_FORMSPREE_API_KEY
 
-        const url = `https://formspree.io/api/0/forms/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}/submissions`
-        console.log('Fetching from URL:', url)
+        console.log('Fetching submissions...')
+        console.log('Form ID exists:', !!formId)
+        console.log('API Key exists:', !!apiKey)
 
-        const response = await fetch(url, {
-          headers: {
-            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_FORMSPREE_API_KEY}`,
-            'Accept': 'application/json'
-          }
-        })
-
-        console.log('Response status:', response.status)
+        const response = await fetch('/api/submissions')
         
         if (!response.ok) {
-          const errorText = await response.text()
-          console.error('Response error:', errorText)
-          throw new Error(`HTTP error! status: ${response.status}`)
+          throw new Error(`Failed to fetch submissions: ${response.status}`)
         }
 
         const data = await response.json()
-        console.log('Response data:', data)
+        console.log('Submissions data:', data)
 
         if (data.submissions) {
           setSubmissions(data.submissions)
-          console.log('Set submissions:', data.submissions.length)
-        } else {
-          console.log('No submissions in response')
         }
       } catch (err) {
-        console.error('Fetch error:', err)
+        console.error('Error:', err)
         setError(err instanceof Error ? err.message : "Failed to load submissions")
       } finally {
         setLoading(false)
