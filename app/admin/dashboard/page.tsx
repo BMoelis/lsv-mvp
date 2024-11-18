@@ -21,12 +21,11 @@ export default function AdminDashboard() {
   const [error, setError] = useState("")
 
   const formatText = (text: string) => {
-    return text.charAt(0).toUpperCase() + text.slice(1)
+    return text?.charAt(0).toUpperCase() + text?.slice(1)
   }
 
   const formatDistribution = (text: string) => {
-    // Handle cases like 'majorLabel' -> 'Major Label'
-    return text.replace(/([A-Z])/g, ' $1').trim().split(' ').map(word => 
+    return text?.replace(/([A-Z])/g, ' $1').trim().split(' ').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ')
   }
@@ -34,19 +33,32 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
+        console.log('Fetching submissions...')
+        console.log('Form ID:', process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID)
+        
         const response = await fetch(`https://formspree.io/api/0/forms/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}/submissions`, {
           headers: {
             'Authorization': `Bearer ${process.env.NEXT_PUBLIC_FORMSPREE_API_KEY}`,
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache'
           }
         })
+        
+        console.log('Response status:', response.status)
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
         const data = await response.json()
+        console.log('Received data:', data)
+        
         if (data.submissions) {
           setSubmissions(data.submissions)
         }
       } catch (err) {
-        console.error('Error:', err)
-        setError("Failed to load submissions")
+        console.error('Error fetching submissions:', err)
+        setError(err instanceof Error ? err.message : "Failed to load submissions")
       } finally {
         setLoading(false)
       }
@@ -56,7 +68,12 @@ export default function AdminDashboard() {
   }, [])
 
   if (loading) return <div className="p-8">Loading submissions...</div>
-  if (error) return <div className="p-8 text-red-500">{error}</div>
+  if (error) return (
+    <div className="p-8">
+      <div className="text-red-500 mb-4">Error loading submissions:</div>
+      <div className="bg-red-50 p-4 rounded-md text-sm">{error}</div>
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
