@@ -21,10 +21,10 @@ export async function POST(req: Request) {
 
     const stream = OpenAIStream(response)
     return new StreamingTextResponse(stream)
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in chat route:', error)
     return new Response(
-      JSON.stringify({ error: error.message || 'An error occurred' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'An error occurred' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     )
   }
