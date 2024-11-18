@@ -1,17 +1,8 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-
-const publishers = [
-  { name: 'Universal Music Publishing Group', logo: '/images/publishers/universal.svg' },
-  { name: 'Sony/ATV Music Publishing', logo: '/images/publishers/sony.svg' },
-  { name: 'Warner Chappell Music', logo: '/images/publishers/warner.svg' },
-  { name: 'Kobalt Music Group', logo: '/images/publishers/kobalt.svg' },
-  { name: 'BMG Rights Management', logo: '/images/publishers/bmg.svg' },
-]
 
 export default function Homepage() {
   return (
@@ -30,7 +21,7 @@ export default function Homepage() {
           <Card className="w-full max-w-4xl mx-auto">
             <CardContent className="p-6">
               <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-                {publishers.map((publisher, index) => (
+                {Array.from({ length: 5 }).map((_, index) => (
                   <div key={index} className="flex items-center justify-center h-16">
                     <div className="h-12 w-32 bg-gray-200 rounded animate-pulse" />
                   </div>
