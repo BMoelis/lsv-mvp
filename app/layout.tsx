@@ -1,11 +1,9 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import Header from './components/Header'
 
 export const metadata = {
   title: 'LSV MVP',
-  description: 'Sample clearance portal for LSV',
+  description: 'Sample clearance platform',
 }
 
 export default function RootLayout({
@@ -15,7 +13,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
+        <Header />
         {children}
       </body>
     </html>
