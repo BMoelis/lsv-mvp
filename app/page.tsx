@@ -30,9 +30,11 @@ export default function Homepage() {
             <div className="flex animate-scroll space-x-8 whitespace-nowrap">
               {[...publishers, ...publishers].map((publisher, index) => (
                 <div key={index} className="inline-flex items-center justify-center min-w-[200px]">
-                  <img
+                  <Image
                     src={publisher.logo}
                     alt={publisher.name}
+                    width={160}
+                    height={64}
                     className="h-12 w-auto object-contain"
                   />
                 </div>
@@ -62,13 +64,14 @@ export default function Homepage() {
         <section className="mb-16">
           <h3 className="text-2xl font-semibold mb-8 text-center">What Our Customers Say</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col h-full">
               <div className="flex items-center mb-4">
                 <div className="w-20 h-20 relative mr-4 flex-shrink-0">
-                  <img
+                  <Image
                     src="https://media.licdn.com/dms/image/v2/C5603AQE2WnBIWTRwAA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1517619824212?e=2147483647&v=beta&t=-Z5ytiZhxmriHDR3LMOl6ms00Kwd4E0P08pHzYT_lxM"
                     alt="Larry Moelis"
-                    className="rounded-full w-full h-full object-cover"
+                    fill
+                    className="rounded-full object-cover"
                   />
                 </div>
                 <div>
@@ -76,24 +79,26 @@ export default function Homepage() {
                   <div className="text-sm text-gray-600">Music Director at BET Media Group</div>
                 </div>
               </div>
-              <blockquote className="text-lg italic mb-4">
-                "Klearance saved us countless hours in receiving approval to use songs for our seasonal award shows. Gamechanger for music directors and anyone looking to clear a song."
+              <blockquote className="text-lg italic mb-4 flex-grow">
+                &ldquo;Klearance saved us countless hours in receiving approval to use songs for our seasonal award shows. Gamechanger for music directors and anyone looking to clear a song.&rdquo;
               </blockquote>
-              <div className="h-12 relative">
-                <img
+              <div className="h-12 relative mt-auto">
+                <Image
                   src="https://upload.wikimedia.org/wikipedia/commons/b/bd/BET-2021Logo.svg"
                   alt="BET Media Group Logo"
-                  className="h-full w-auto object-contain"
+                  fill
+                  className="object-contain"
                 />
               </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
+            <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col h-full">
               <div className="flex items-center mb-4">
                 <div className="w-20 h-20 relative mr-4 flex-shrink-0">
-                  <img
+                  <Image
                     src="https://www.nmpa.org/wp-content/uploads/2021/06/HubertLaurent-Headshot.jpg"
                     alt="Laurent Hubert"
-                    className="rounded-full w-full h-full object-cover"
+                    fill
+                    className="rounded-full object-cover"
                   />
                 </div>
                 <div>
@@ -101,14 +106,15 @@ export default function Homepage() {
                   <div className="text-sm text-gray-600">CEO of Kobalt Music</div>
                 </div>
               </div>
-              <blockquote className="text-lg italic mb-4">
-                "Responsive, efficient, and easy to work with. Klearance is like an extension of our team!"
+              <blockquote className="text-lg italic mb-4 flex-grow">
+                &ldquo;Responsive, efficient, and easy to work with. Klearance is like an extension of our team!&rdquo;
               </blockquote>
-              <div className="h-12 relative">
-                <img
+              <div className="h-12 relative mt-auto">
+                <Image
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_WhLWC_RAGpkIR8nOJyVcyXFRVoIFf7v-dA&s"
                   alt="Kobalt Music Logo"
-                  className="h-full w-auto object-contain"
+                  fill
+                  className="object-contain"
                 />
               </div>
             </div>
