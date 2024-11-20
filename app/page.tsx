@@ -3,6 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
+import { ArrowRight, Brain, Activity, LinkIcon, Zap, TrendingUp, Heart } from 'lucide-react'
+import StreamlineWorkflow from './components/StreamlineWorkflow'
+import HowKlearanceWorks from './components/HowKlearanceWorks'
+import Testimonials from './components/Testimonials'
 
 const publishers = [
   { name: 'Universal Music Publishing Group', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Universal_Music_Publishing_Group.svg' },
@@ -14,18 +18,33 @@ const publishers = [
 
 export default function Homepage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="container mx-auto px-4 py-8">
-        <section className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Automate Your Sample Clearance Requests</h2>
-          <p className="text-xl mb-8">Streamline your music production workflow with our AI-powered sample clearance automation service.</p>
-          <Link href="/sample-request">
-            <Button size="lg">Get Started</Button>
-          </Link>
+    <div className="min-h-screen bg-white">
+      <main>
+        <section className="bg-[#0F172A] text-white py-20">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+              Automate Your Sample <br className="hidden md:inline" /> Clearance Requests
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
+              Streamline your music production workflow with our AI-powered sample clearance automation service.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <Link href="/sample-request">
+                <Button size="lg" className="bg-[#38BDF8] hover:bg-[#0EA5E9] w-full sm:w-auto">
+                  Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white/10">
+                Watch Demo
+              </Button>
+            </div>
+          </div>
         </section>
 
-        <section className="mb-16">
-          <h3 className="text-2xl font-semibold mb-4 text-center">Trusted by Top Music Publishers</h3>
+        <StreamlineWorkflow />
+
+        <section className="py-16 md:py-24">
+          <h2 className="text-3xl font-bold mb-10 text-center">Trusted by Top Music Publishers</h2>
           <div className="w-full max-w-4xl mx-auto overflow-hidden">
             <div className="flex animate-scroll space-x-8 whitespace-nowrap">
               {[...publishers, ...publishers].map((publisher, index) => (
@@ -43,142 +62,53 @@ export default function Homepage() {
           </div>
         </section>
 
-        <section className="mb-16">
-          <h3 className="text-2xl font-semibold mb-4 text-center">Impressive Results</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <h4 className="text-4xl font-bold mb-2">50%</h4>
-              <p>Faster Clearances</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <h4 className="text-4xl font-bold mb-2">30%</h4>
-              <p>Lift in Clearance Requests</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <h4 className="text-4xl font-bold mb-2">95%</h4>
-              <p>Customer Satisfaction</p>
+        <HowKlearanceWorks />
+
+        <section className="mt-16 mb-16">
+          <div className="container mx-auto px-4">
+            <h3 className="text-2xl font-semibold mb-4 text-center">Impressive Results</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-6 h-6 text-gray-600" />
+                </div>
+                <h4 className="text-4xl font-bold mb-2">50%</h4>
+                <p>Faster Clearances</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-6 h-6 text-gray-600" />
+                </div>
+                <h4 className="text-4xl font-bold mb-2">30%</h4>
+                <p>Lift in Clearance Requests</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm text-center">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-6 h-6 text-gray-600" />
+                </div>
+                <h4 className="text-4xl font-bold mb-2">95%</h4>
+                <p>Customer Satisfaction</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="mb-16">
-          <h3 className="text-2xl font-semibold mb-8 text-center">What Our Customers Say</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col h-full">
-              <div className="flex items-center mb-4">
-                <div className="w-20 h-20 relative mr-4 flex-shrink-0">
-                  <Image
-                    src="https://media.licdn.com/dms/image/v2/C5603AQE2WnBIWTRwAA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1517619824212?e=2147483647&v=beta&t=-Z5ytiZhxmriHDR3LMOl6ms00Kwd4E0P08pHzYT_lxM"
-                    alt="Larry Moelis"
-                    fill
-                    className="rounded-full object-cover"
-                  />
-                </div>
-                <div>
-                  <div className="font-semibold">Larry Moelis</div>
-                  <div className="text-sm text-gray-600">Music Director at BET Media Group</div>
-                </div>
-              </div>
-              <blockquote className="text-lg italic mb-4 flex-grow">
-                &ldquo;Klearance saved us countless hours in receiving approval to use songs for our seasonal award shows. Gamechanger for music directors and anyone looking to clear a song.&rdquo;
-              </blockquote>
-              <div className="h-12 relative mt-auto">
-                <Image
-                  src="https://upload.wikimedia.org/wikipedia/commons/b/bd/BET-2021Logo.svg"
-                  alt="BET Media Group Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col h-full">
-              <div className="flex items-center mb-4">
-                <div className="w-20 h-20 relative mr-4 flex-shrink-0">
-                  <Image
-                    src="https://www.nmpa.org/wp-content/uploads/2021/06/HubertLaurent-Headshot.jpg"
-                    alt="Laurent Hubert"
-                    fill
-                    className="rounded-full object-cover"
-                  />
-                </div>
-                <div>
-                  <div className="font-semibold">Laurent Hubert</div>
-                  <div className="text-sm text-gray-600">CEO of Kobalt Music</div>
-                </div>
-              </div>
-              <blockquote className="text-lg italic mb-4 flex-grow">
-                &ldquo;Responsive, efficient, and easy to work with. Klearance is like an extension of our team!&rdquo;
-              </blockquote>
-              <div className="h-12 relative mt-auto">
-                <Image
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_WhLWC_RAGpkIR8nOJyVcyXFRVoIFf7v-dA&s"
-                  alt="Kobalt Music Logo"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
+        <Testimonials />
+
+        <section className="bg-[#0F172A] text-white py-20">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-6">Ready to revolutionize your sample clearance process?</h2>
+            <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
+              Join thousands of music professionals who trust Klearance for faster, easier sample clearances.
+            </p>
+            <Link href="/sample-request">
+              <Button size="lg" className="bg-[#38BDF8] hover:bg-[#0EA5E9]">
+                Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </section>
       </main>
-
-      <footer className="bg-gray-100 text-gray-600 py-12 border-t">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-            <div>
-              <h4 className="font-semibold text-lg mb-4">Company</h4>
-              <ul className="space-y-2">
-                <li><Link href="/" className="hover:text-gray-900">Home</Link></li>
-                <li><Link href="/about" className="hover:text-gray-900">About Us</Link></li>
-                <li><Link href="/careers" className="hover:text-gray-900">Careers</Link></li>
-                <li><Link href="/press" className="hover:text-gray-900">Press</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-4">Product</h4>
-              <ul className="space-y-2">
-                <li><Link href="/features" className="hover:text-gray-900">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-gray-900">Pricing</Link></li>
-                <li><Link href="/enterprise" className="hover:text-gray-900">Enterprise</Link></li>
-                <li><Link href="/security" className="hover:text-gray-900">Security</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-4">Resources</h4>
-              <ul className="space-y-2">
-                <li><Link href="/help" className="hover:text-gray-900">Help Center</Link></li>
-                <li><Link href="/api" className="hover:text-gray-900">API Documentation</Link></li>
-                <li><Link href="/blog" className="hover:text-gray-900">Blog</Link></li>
-                <li><Link href="/partners" className="hover:text-gray-900">Partners</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-4">Legal</h4>
-              <ul className="space-y-2">
-                <li><Link href="/privacy" className="hover:text-gray-900">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-gray-900">Terms of Service</Link></li>
-                <li><Link href="/cookies" className="hover:text-gray-900">Cookie Policy</Link></li>
-                <li><Link href="/gdpr" className="hover:text-gray-900">GDPR Compliance</Link></li>
-              </ul>
-            </div>
-            <div className="col-span-2">
-              <h4 className="font-semibold text-lg mb-4">Stay Connected</h4>
-              <p className="mb-4">Subscribe to our newsletter for updates and insights.</p>
-              <form className="flex gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  className="flex-grow px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <Button type="submit" className="rounded-md">Subscribe</Button>
-              </form>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-gray-200 text-center">
-            <p>&copy; 2024 Klearance. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
 
       <style jsx global>{`
         @keyframes scroll {

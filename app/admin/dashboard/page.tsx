@@ -1,6 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Eye } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import MetricsCards from '../../components/MetricsCards'
 
 interface Submission {
   id: string
@@ -20,6 +23,17 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
+  const metrics = {
+    totalRequests: 156,
+    totalChange: 12,
+    pendingReview: 23,
+    pendingChange: -5,
+    approved: 89,
+    approvedChange: 18,
+    averageTime: 3.2,
+    timeComparison: "Faster than last month"
+  }
+
   const formatText = (text: string) => {
     return text?.charAt(0).toUpperCase() + text?.slice(1)
   }
@@ -33,13 +47,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID
-        const apiKey = process.env.NEXT_PUBLIC_FORMSPREE_API_KEY
-
-        console.log('Fetching submissions...')
-        console.log('Form ID exists:', !!formId)
-        console.log('API Key exists:', !!apiKey)
-
         const response = await fetch('/api/submissions')
         
         if (!response.ok) {
@@ -73,55 +80,63 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl font-bold mb-8">Sample Clearance Requests</h1>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex justify-between mb-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold">Sample Clearance Requests</h1>
+          <Button variant="default">New Request</Button>
+        </div>
+
+        <MetricsCards metrics={metrics} />
+
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-4 flex justify-between items-center border-b">
             <input
               type="text"
               placeholder="Search requests..."
-              className="w-64 p-2 border rounded-md"
+              className="pl-3 pr-10 py-2 border rounded-md w-64"
             />
-            <select className="p-2 border rounded-md">
+            <select className="border rounded-md px-3 py-2">
               <option>Sort by date</option>
               <option>Sort by status</option>
+              <option>Sort by artist</option>
             </select>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2">Original Song</th>
-                  <th className="text-left p-2">Original Artist</th>
-                  <th className="text-left p-2">New Song</th>
-                  <th className="text-left p-2">New Artist</th>
-                  <th className="text-left p-2">Usage Type</th>
-                  <th className="text-left p-2">Distribution</th>
-                  <th className="text-left p-2">Date</th>
-                  <th className="text-left p-2">Status</th>
-                  <th className="text-left p-2">Actions</th>
+                <tr className="border-b bg-gray-50">
+                  <th className="text-left p-4">Original Song</th>
+                  <th className="text-left p-4">Original Artist</th>
+                  <th className="text-left p-4">New Song</th>
+                  <th className="text-left p-4">New Artist</th>
+                  <th className="text-left p-4">Usage Type</th>
+                  <th className="text-left p-4">Distribution</th>
+                  <th className="text-left p-4">Date</th>
+                  <th className="text-left p-4">Status</th>
+                  <th className="text-left p-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {submissions.map((submission, index) => (
-                  <tr key={`submission-${index}`} className="border-b">
-                    <td className="p-2">{submission.originalSong || 'N/A'}</td>
-                    <td className="p-2">{submission.originalArtist || 'N/A'}</td>
-                    <td className="p-2">{submission.newSong || 'N/A'}</td>
-                    <td className="p-2">{submission.newArtist || 'N/A'}</td>
-                    <td className="p-2">{formatText(submission.usageType) || 'N/A'}</td>
-                    <td className="p-2">{formatDistribution(submission.distributionType) || 'N/A'}</td>
-                    <td className="p-2">{new Date(submission._date).toLocaleDateString()}</td>
-                    <td className="p-2">
-                      <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-full text-sm">
-                        new
+                  <tr key={`submission-${index}`} className="border-b hover:bg-gray-50">
+                    <td className="p-4">{submission.originalSong || 'N/A'}</td>
+                    <td className="p-4">{submission.originalArtist || 'N/A'}</td>
+                    <td className="p-4">{submission.newSong || 'N/A'}</td>
+                    <td className="p-4">{submission.newArtist || 'N/A'}</td>
+                    <td className="p-4">{formatText(submission.usageType) || 'N/A'}</td>
+                    <td className="p-4">{formatDistribution(submission.distributionType) || 'N/A'}</td>
+                    <td className="p-4">{new Date(submission._date).toLocaleDateString()}</td>
+                    <td className="p-4">
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                        New
                       </span>
                     </td>
-                    <td className="p-2">
-                      <button className="text-black hover:text-gray-700">
-                        View Details
-                      </button>
+                    <td className="p-4">
+                      <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                        <Eye className="h-4 w-4" />
+                        View
+                      </Button>
                     </td>
                   </tr>
                 ))}

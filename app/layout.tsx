@@ -1,8 +1,9 @@
 import './globals.css'
 import Header from './components/Header'
+import Footer from './components/Footer'
 
 export const metadata = {
-  title: 'LSV MVP',
+  title: 'Klearance',
   description: 'Sample clearance platform',
 }
 
@@ -16,6 +17,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   )
