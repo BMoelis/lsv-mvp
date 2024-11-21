@@ -9,7 +9,9 @@ const nextConfig = {
       'seekvectorlogo.net',
       'images.ctfassets.net',
       'concord.com',
-      'www.marketbeat.com'
+      'www.marketbeat.com',
+      'ih1.redbubble.net',
+      'i.pcmag.com'
     ],
   },
 }

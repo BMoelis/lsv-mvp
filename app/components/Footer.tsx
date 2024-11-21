@@ -19,14 +19,15 @@ export default function Footer() {
             </form>
           </div>
           <div>
-            <h4 className="font-semibold text-lg mb-4">Product</h4>
-            <ul className="space-y-2">
-              <li><Link href="/features" className="hover:text-white">Features</Link></li>
-              <li><Link href="/pricing" className="hover:text-white">Pricing</Link></li>
-              <li><Link href="/enterprise" className="hover:text-white">Enterprise</Link></li>
-              <li><Link href="/security" className="hover:text-white">Security</Link></li>
-            </ul>
-          </div>
+  <h4 className="font-semibold text-lg mb-4">Product</h4>
+  <ul className="space-y-2">
+    <li><Link href="/features" className="hover:text-white">Features</Link></li>
+    <li><Link href="/pricing" className="hover:text-white">Pricing</Link></li>
+    <li><Link href="/enterprise" className="hover:text-white">Enterprise</Link></li>
+    <li><Link href="/security" className="hover:text-white">Security</Link></li>
+    <li><Link href="/integrations" className="hover:text-white">Integrations</Link></li>
+  </ul>
+</div>
           <div>
             <h4 className="font-semibold text-lg mb-4">Company</h4>
             <ul className="space-y-2">
@@ -40,8 +41,8 @@ export default function Footer() {
             <h4 className="font-semibold text-lg mb-4">Resources</h4>
             <ul className="space-y-2">
               <li><Link href="/help" className="hover:text-white">Help Center</Link></li>
-              <li><Link href="/docs" className="hover:text-white">Documentation</Link></li>
-              <li><Link href="/guides" className="hover:text-white">Guides</Link></li>
+              <li><Link href="/documentation" className="hover:text-white">Documentation</Link></li>
+              <li><Link href="/guide" className="hover:text-white">Guides</Link></li>
               <li><Link href="/api" className="hover:text-white">API</Link></li>
             </ul>
           </div>

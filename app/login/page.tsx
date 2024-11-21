@@ -1,6 +1,5 @@
 "use client"
 
-import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -16,27 +15,27 @@ export default function LoginPage() {
   const [adminEmail, setAdminEmail] = useState("")
   const [adminPassword, setAdminPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent, isAdmin: boolean) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
-    try {
-      const result = await signIn("credentials", {
-        email: isAdmin ? adminEmail : email,
-        password: isAdmin ? adminPassword : password,
-        redirect: false,
-      })
+    const checkEmail = isAdmin ? adminEmail : email
+    const checkPassword = isAdmin ? adminPassword : password
 
-      if (!result?.error) {
-        router.push(isAdmin ? "/admin/dashboard" : "/dashboard")
-      }
-    } catch (error) {
-      console.error("Login error:", error)
-    } finally {
-      setIsLoading(false)
+    // Simple credential check
+    if (isAdmin && checkEmail === "smoelis.lastrada@gmail.com" && checkPassword === "Rangers94") {
+      router.push("/admin/dashboard")
+    } else if (!isAdmin && checkEmail === "bmoelis97@gmail.com" && checkPassword === "Wfz82w92!!!!") {
+      router.push("/dashboard")
+    } else {
+      setError("Invalid credentials")
     }
+
+    setIsLoading(false)
   }
 
   return (
@@ -49,6 +48,11 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <div className="mb-4 p-2 text-sm text-red-600 bg-red-50 rounded">
+              {error}
+            </div>
+          )}
           <Tabs defaultValue="requestor" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8">
               <TabsTrigger value="requestor" className="flex items-center gap-2">
