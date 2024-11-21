@@ -2,7 +2,24 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { CommentsDialog } from "@/components/ui/comments-dialog"
+import { RequestActionsDialog } from "@/components/ui/request-actions-dialog"
 import { Input } from "@/components/ui/input"
+
+interface RequestDetails {
+  id: string
+  originalSong: string
+  originalArtist: string
+  newSong: string
+  newArtist: string
+  usageType: string
+  distributionType: string
+  status: string
+  comments: number
+  _date: string
+  email: string
+  notes: string
+}
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
@@ -20,7 +37,9 @@ const mockUserRequests = [
     distributionType: "Independent Label",
     _date: "2024-01-19",
     status: "pending",
-    comments: 2
+    comments: 2,
+    email: "melanie@example.com",
+    notes: "Planning to use the main hook for chorus"
   },
   {
     id: "2",
@@ -32,7 +51,9 @@ const mockUserRequests = [
     distributionType: "Independent Label",
     _date: "2024-01-15",
     status: "approved",
-    comments: 4
+    comments: 4,
+    email: "melanie@example.com",
+    notes: "Using synth progression in bridge section"
   },
   {
     id: "3",
@@ -44,7 +65,9 @@ const mockUserRequests = [
     distributionType: "Independent Label",
     _date: "2024-01-10",
     status: "rejected",
-    comments: 1
+    comments: 1,
+    email: "melanie@example.com",
+    notes: "Incorporating main synth riff throughout"
   }
 ]
 
@@ -56,6 +79,10 @@ const stats = [
 ]
 
 export default function RequestorDashboard() {
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false)
+  const [isActionsOpen, setIsActionsOpen] = useState(false)
+const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(null)
+  const [selectedRequestId, setSelectedRequestId] = useState<string>("")
   const getStatusBadge = (status: string) => {
     const statusStyles = {
       pending: { variant: "secondary", label: "Pending" },
@@ -127,17 +154,47 @@ export default function RequestorDashboard() {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-1">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="flex items-center gap-1"
+                    onClick={() => {
+                      setSelectedRequestId(request.id)
+                      setIsCommentsOpen(true)
+                    }}
+                  >
                     <MessageSquare className="h-4 w-4 text-gray-400" />
                     <span>{request.comments}</span>
-                  </div>
+                  </Button>
+                  {selectedRequestId === request.id && (
+                    <CommentsDialog
+                      isOpen={isCommentsOpen}
+                      setIsOpen={setIsCommentsOpen}
+                      requestId={selectedRequestId}
+                    />
+                  )}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
-                    View
-                  </Button>
-                </TableCell>
+  <Button 
+    variant="ghost" 
+    size="sm" 
+    className="flex items-center gap-2"
+    onClick={() => {
+      setSelectedRequest(request)
+      setIsActionsOpen(true)
+    }}
+  >
+    <Eye className="h-4 w-4" />
+    View
+  </Button>
+  {selectedRequest && (
+    <RequestActionsDialog
+      isOpen={isActionsOpen}
+      setIsOpen={setIsActionsOpen}
+      request={selectedRequest}
+    />
+  )}
+</TableCell>
               </TableRow>
             ))}
           </TableBody>

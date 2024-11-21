@@ -92,7 +92,6 @@ export default function SampleRequestForm() {
               <option value="">Select usage type</option>
               <option value="sample">Sample</option>
               <option value="interpolation">Interpolation</option>
-              <option value="masterReplay">Master Replay</option>
             </select>
           </div>
 

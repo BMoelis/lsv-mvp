@@ -3,9 +3,9 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export default function Testimonials() {
   return (
-    <section className="mb-16">
+    <section className="py-12 px-4">
       <h3 className="text-2xl font-semibold mb-8 text-center">What Our Customers Say</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center mb-4">

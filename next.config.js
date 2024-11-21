@@ -16,7 +16,9 @@ const nextConfig = {
       'www.downtownmusic.com',
       'www.roundhillmusic.com',
       'www.spiritmusicgroup.com',
-      'cdn.prod.website-files.com'
+      'cdn.prod.website-files.com',
+      'ih1.redbubble.net',
+      'i.pcmag.com'
     ],
   },
 }

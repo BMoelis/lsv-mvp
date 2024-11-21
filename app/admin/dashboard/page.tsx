@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Eye } from 'lucide-react'
+import { Eye, MessageSquare } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import MetricsCards from '../../components/MetricsCards'
+import { AdminCommentsDialog } from "@/components/ui/admin-comments-dialog"
+import { RequestActionsDialog } from "@/components/ui/request-actions-dialog"
 
 interface Submission {
   id: string
@@ -16,12 +18,16 @@ interface Submission {
   originalArtist: string
   originalSong: string
   usageType: string
+  status?: string
 }
 
 export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false)
+const [selectedSubmissionId, setSelectedSubmissionId] = useState<string>("")
+const [isActionsOpen, setIsActionsOpen] = useState(false)
 
   const metrics = {
     totalRequests: 156,
@@ -104,17 +110,18 @@ export default function AdminDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b bg-gray-50">
-                  <th className="text-left p-4">Original Song</th>
-                  <th className="text-left p-4">Original Artist</th>
-                  <th className="text-left p-4">New Song</th>
-                  <th className="text-left p-4">New Artist</th>
-                  <th className="text-left p-4">Usage Type</th>
-                  <th className="text-left p-4">Distribution</th>
-                  <th className="text-left p-4">Date</th>
-                  <th className="text-left p-4">Status</th>
-                  <th className="text-left p-4">Actions</th>
-                </tr>
+              <tr className="border-b bg-gray-50">
+  <th className="text-left p-4">Original Song</th>
+  <th className="text-left p-4">Original Artist</th>
+  <th className="text-left p-4">New Song</th>
+  <th className="text-left p-4">New Artist</th>
+  <th className="text-left p-4">Usage Type</th>
+  <th className="text-left p-4">Distribution</th>
+  <th className="text-left p-4">Date</th>
+  <th className="text-left p-4">Status</th>
+  <th className="text-left p-4">Comments</th>
+  <th className="text-left p-4">Actions</th>
+</tr>
               </thead>
               <tbody>
                 {submissions.map((submission, index) => (
@@ -127,16 +134,58 @@ export default function AdminDashboard() {
                     <td className="p-4">{formatDistribution(submission.distributionType) || 'N/A'}</td>
                     <td className="p-4">{new Date(submission._date).toLocaleDateString()}</td>
                     <td className="p-4">
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                        New
-                      </span>
-                    </td>
+  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+    submission.status === 'approved' 
+      ? 'bg-green-100 text-green-800'
+      : submission.status === 'rejected'
+      ? 'bg-red-100 text-red-800'
+      : 'bg-blue-100 text-blue-800'
+  }`}>
+    {submission.status || 'New'}
+  </span>
+</td>
+<td className="p-4">
+  <Button 
+    variant="ghost" 
+    size="sm" 
+    className="flex items-center gap-2"
+    onClick={() => {
+      setSelectedSubmissionId(submission.id)
+      setIsActionsOpen(true)
+    }}
+  >
+    <Eye className="h-4 w-4" />
+    View
+  </Button>
+  {selectedSubmissionId === submission.id && (
+    <RequestActionsDialog
+      isOpen={isActionsOpen}
+      setIsOpen={setIsActionsOpen}
+      request={submission}
+    />
+  )}
+</td>
                     <td className="p-4">
-                      <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                        <Eye className="h-4 w-4" />
-                        View
-                      </Button>
-                    </td>
+  <Button 
+    variant="ghost" 
+    size="sm" 
+    className="flex items-center gap-1"
+    onClick={() => {
+      setSelectedSubmissionId(submission.id)
+      setIsCommentsOpen(true)
+    }}
+  >
+    <MessageSquare className="h-4 w-4 text-gray-400" />
+    <span>2</span>
+  </Button>
+  {selectedSubmissionId === submission.id && (
+    <AdminCommentsDialog
+      isOpen={isCommentsOpen}
+      setIsOpen={setIsCommentsOpen}
+      requestId={selectedSubmissionId}
+    />
+  )}
+</td>
                   </tr>
                 ))}
               </tbody>

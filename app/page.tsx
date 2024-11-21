@@ -50,7 +50,7 @@ export default function Homepage() {
 
         <section className="py-16 md:py-24">
   <h2 className="text-3xl font-bold mb-10 text-center">Trusted by Top Music Publishers</h2>
-  <div className="w-full max-w-4xl mx-auto overflow-hidden relative">
+  <div className="w-full max-w-4xl mx-auto overflow-hidden relative before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-[100px] before:bg-gradient-to-r before:from-white before:to-transparent after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-[100px] after:bg-gradient-to-l after:from-white after:to-transparent">
     <div className="flex animate-scroll">
       {[...publishers, ...publishers].map((publisher, index) => (
         <div key={index} className="flex-shrink-0 w-[200px] mx-4">
