@@ -14,6 +14,11 @@ const publishers = [
   { name: 'Warner Chappell Music', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Warner_Chappell_Music_logo.svg/1200px-Warner_Chappell_Music_logo.svg.png' },
   { name: 'Kobalt Music Group', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a6/Kobalt_Music_Group_logo.svg/1280px-Kobalt_Music_Group_logo.svg.png' },
   { name: 'BMG Rights Management', logo: 'https://seekvectorlogo.net/wp-content/uploads/2019/04/bmg-rights-management-gmbh-vector-logo.png' },
+  { name: 'Concord Music Publishing', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/ConcordMG_logo_Final.jpg' },
+  { name: 'Primary Wave', logo: 'https://primarywave.com/wp-content/uploads/2018/02/cropped-logo_footer.png' },
+  { name: 'Spirit Music Group', logo: 'https://www.spiritmusicgroup.com/wp-content/uploads/2023/03/spirit-logo-single.png' },
+  { name: 'Round Hill Music', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/8d/Rhmlogonew.jpg' },
+  { name: 'Reservoir Media', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Reservoir_Media_logo.svg/800px-Reservoir_Media_logo.svg.png' }
 ]
 
 export default function Homepage() {
@@ -44,23 +49,23 @@ export default function Homepage() {
         <StreamlineWorkflow />
 
         <section className="py-16 md:py-24">
-          <h2 className="text-3xl font-bold mb-10 text-center">Trusted by Top Music Publishers</h2>
-          <div className="w-full max-w-4xl mx-auto overflow-hidden">
-            <div className="flex animate-scroll space-x-8 whitespace-nowrap">
-              {[...publishers, ...publishers].map((publisher, index) => (
-                <div key={index} className="inline-flex items-center justify-center min-w-[200px]">
-                  <Image
-                    src={publisher.logo}
-                    alt={publisher.name}
-                    width={160}
-                    height={64}
-                    className="h-12 w-auto object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+  <h2 className="text-3xl font-bold mb-10 text-center">Trusted by Top Music Publishers</h2>
+  <div className="w-full max-w-4xl mx-auto overflow-hidden relative">
+    <div className="flex animate-scroll">
+      {[...publishers, ...publishers].map((publisher, index) => (
+        <div key={index} className="flex-shrink-0 w-[200px] mx-4">
+          <Image
+            src={publisher.logo}
+            alt={publisher.name}
+            width={160}
+            height={64}
+            className="h-12 w-auto object-contain"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
 
         <HowKlearanceWorks />
 
@@ -115,9 +120,16 @@ export default function Homepage() {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        .animate-scroll {
-          animation: scroll 20s linear infinite;
-        }
+        @keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+  display: flex;
+  width: calc(250px * 14);
+}
       `}</style>
     </div>
   )

@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     domains: [
@@ -10,8 +12,11 @@ const nextConfig = {
       'images.ctfassets.net',
       'concord.com',
       'www.marketbeat.com',
-      'ih1.redbubble.net',
-      'i.pcmag.com'
+      'primarywave.com',
+      'www.downtownmusic.com',
+      'www.roundhillmusic.com',
+      'www.spiritmusicgroup.com',
+      'cdn.prod.website-files.com'
     ],
   },
 }

@@ -66,14 +66,14 @@ export default function PricingPage() {
             </div>
             <p className="text-gray-600 mb-6">{plan.description}</p>
             <Link href="/sample-request">
-              <Button className="w-full mb-8">
-                {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
-              </Button>
+            <Button className="w-full mb-8 bg-[#0F172A] hover:bg-[#1E293B]">
+  {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
+</Button>
             </Link>
             <ul className="space-y-4">
               {plan.features.map((feature, featureIndex) => (
                 <li key={featureIndex} className="flex items-center">
-                  <Check className="h-5 w-5 text-green-500 mr-2" />
+                  <Check className="h-5 w-5 text-[#38BDF8] mr-2" />
                   <span>{feature}</span>
                 </li>
               ))}
@@ -87,9 +87,9 @@ export default function PricingPage() {
         <p className="text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
           Our team is here to help you find the perfect solution for your needs.
         </p>
-        <Button size="lg" className="bg-[#38BDF8] hover:bg-[#0EA5E9]">
-          Contact Sales
-        </Button>
+        <Button size="lg" className="bg-[#38BDF8] hover:bg-[#0EA5E9] px-8">
+  Contact Sales
+</Button>
       </div>
     </main>
   )

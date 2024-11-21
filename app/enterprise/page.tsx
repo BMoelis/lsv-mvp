@@ -4,12 +4,13 @@ import { CheckCircle, BarChart, Lock, Users, Zap, HeadphonesIcon } from 'lucide-
 
 export default function EnterprisePage() {
   const features = [
-    { title: "Advanced Analytics", description: "Gain deep insights into your sample usage and clearance processes.", icon: BarChart },
-    { title: "Enhanced Security", description: "Enterprise-grade security features to protect your valuable assets.", icon: Lock },
-    { title: "Team Collaboration", description: "Seamlessly work together with unlimited team members.", icon: Users },
-    { title: "API Access", description: "Integrate Klearance directly into your existing workflows.", icon: Zap },
-    { title: "Dedicated Support", description: "24/7 priority support from our expert team.", icon: HeadphonesIcon },
-    { title: "Custom Workflows", description: "Tailor Klearance to fit your organization's unique needs.", icon: CheckCircle },
+    { title: "Unlimited Requests", description: "Unlimited sample clearance requests", icon: CheckCircle },
+    { title: "Account Management", description: "Dedicated account manager", icon: Users },
+    { title: "Premium Support", description: "24/7 priority support", icon: HeadphonesIcon },
+    { title: "Custom Integration", description: "Custom integration options", icon: Zap },
+    { title: "Rights Management", description: "Advanced rights management", icon: Lock },
+    { title: "Bulk Processing", description: "Bulk processing capabilities", icon: BarChart },
+    { title: "Custom Reporting", description: "Custom reporting solutions", icon: BarChart }
   ]
 
   return (
