@@ -3,68 +3,150 @@
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Label } from "@/components/ui/label"
+import { Lock, Mail, Shield, User } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [adminEmail, setAdminEmail] = useState("")
+  const [adminPassword, setAdminPassword] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, isAdmin: boolean) => {
     e.preventDefault()
+    setIsLoading(true)
 
     try {
       const result = await signIn("credentials", {
-        email,
-        password,
+        email: isAdmin ? adminEmail : email,
+        password: isAdmin ? adminPassword : password,
         redirect: false,
       })
 
       if (!result?.error) {
-        router.push("/admin/dashboard")
+        router.push(isAdmin ? "/admin/dashboard" : "/dashboard")
       }
-    } catch {
-      // Handle error silently
+    } catch (error) {
+      console.error("Login error:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow p-8">
-        <h1 className="text-2xl font-bold text-center mb-8">Sign in to your account</h1>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Email address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full p-2 border rounded-md"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full p-2 border rounded-md"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
-          >
-            Sign in
-          </button>
-        </form>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">Sign in to Klearance</CardTitle>
+          <CardDescription>
+            Choose your account type to continue
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="requestor" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="requestor" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Requestor
+              </TabsTrigger>
+              <TabsTrigger value="admin" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Admin
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="requestor">
+              <form onSubmit={(e) => handleSubmit(e, false)}>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        id="email" 
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="name@example.com" 
+                        className="pl-9"
+                        required 
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        id="password" 
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="pl-9"
+                        required 
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Signing in..." : "Sign in"}
+                  </Button>
+                </div>
+              </form>
+            </TabsContent>
+            <TabsContent value="admin">
+              <form onSubmit={(e) => handleSubmit(e, true)}>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-email">Admin Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        id="admin-email" 
+                        type="email"
+                        value={adminEmail}
+                        onChange={(e) => setAdminEmail(e.target.value)}
+                        placeholder="admin@klearance.com" 
+                        className="pl-9"
+                        required 
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="admin-password">Admin Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        id="admin-password" 
+                        type="password"
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        className="pl-9"
+                        required 
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Signing in..." : "Sign in as Admin"}
+                  </Button>
+                </div>
+              </form>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   )
 }
