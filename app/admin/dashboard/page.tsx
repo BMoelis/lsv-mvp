@@ -40,20 +40,28 @@ const [isActionsOpen, setIsActionsOpen] = useState(false)
 const [searchTerm, setSearchTerm] = useState("")
 const [filteredSubmissions, setFilteredSubmissions] = useState(submissions)
 const [sorting, setSorting] = useState<"asc" | "desc">("asc")
-const [selectedRequest, setSelectedRequest] = useState<Request | null>(null)
+const [selectedRequest, setSelectedRequest] = useState<Submission | null>(null)
 const [isModalOpen, setIsModalOpen] = useState(false)
-const handleReject = () => {
-  console.log("Rejecting request:", selectedRequest?.newSong)
-  closeModal()
-}
-const handleCounter = () => {
-  console.log("Countering request:", selectedRequest?.newSong)
-  closeModal()
-}
-const handleApprove = () => {
-  console.log("Approving request:", selectedRequest?.newSong)
-  closeModal()
-}
+
+const closeModal = () => {
+  setIsCommentsOpen(false);
+  setSelectedSubmissionId("");
+};
+
+const handleRejectRequest = () => {
+  console.log("Rejecting request:", selectedSubmissionId);
+  closeModal();
+};
+
+const handleCounterRequest = () => {
+  console.log("Countering request:", selectedSubmissionId);
+  closeModal();
+};
+
+const handleApproveRequest = () => {
+  console.log("Approving request:", selectedSubmissionId);
+  closeModal();
+};
 
   const metrics = {
     totalRequests: 156,
@@ -276,11 +284,11 @@ const handleApprove = () => {
     </Card>
   </ScrollArea>
   <div className="flex justify-end gap-2 pt-4 border-t mt-auto">
-    <Button variant="outline" onClick={() => setIsCommentsOpen(false)}>Close</Button>
-    <Button className="bg-red-500 hover:bg-red-600 text-white">Reject Request</Button>
-    <Button className="bg-yellow-500 hover:bg-yellow-600 text-black">Counter Request</Button>
-    <Button className="bg-green-500 hover:bg-green-600 text-white">Approve Request</Button>
-  </div>
+  <Button variant="outline" onClick={closeModal}>Close</Button>
+  <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={handleRejectRequest}>Reject Request</Button>
+  <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" onClick={handleCounterRequest}>Counter Request</Button>
+  <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={handleApproveRequest}>Approve Request</Button>
+</div>
 </DialogContent>
   </Dialog>
 </td>
