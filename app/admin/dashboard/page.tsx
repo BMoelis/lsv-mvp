@@ -106,16 +106,24 @@ export default function AdminDashboard() {
     const fetchSubmissions = async () => {
       try {
         const response = await fetch('/api/submissions')
-
         if (!response.ok) {
           throw new Error(`Failed to fetch submissions: ${response.status}`)
         }
-
         const data = await response.json()
         console.log('Submissions data:', data)
-
         if (data.submissions) {
-          setSubmissions(data.submissions)
+          const enhancedSubmissions = data.submissions.map((submission: Submission) => ({
+            ...submission,
+            analysis: {
+              usageDescription: `The nature of the use of ${submission.originalSong} by ${submission.originalArtist} is as ${submission.usageType} that appears throughout the new work "${submission.newSong}" by ${submission.newArtist}. This creates a musical structure that represents a significant portion of the new work.`,
+              artistBackground: `${submission.newArtist} is releasing this work through ${formatDistribution(submission.distributionType)}. The commercial potential will depend on the label's ability to promote to their existing fan base.`,
+              recommendation: `Based on the ${submission.usageType} usage and ${formatDistribution(submission.distributionType)} distribution, we recommend granting rights for the copyright interest in "${submission.originalSong}". This takes into account the nature of use and commercial potential of the release.`,
+              systemRecommendation: submission.distributionType === "majorLabel" ?
+                "50% copyright interest in the new work" :
+                "22.5% copyright interest in the new work with a 20% floor"
+            }
+          }))
+          setSubmissions(enhancedSubmissions)
         }
       } catch (err) {
         console.error('Error:', err)
@@ -124,7 +132,6 @@ export default function AdminDashboard() {
         setLoading(false)
       }
     }
-
     fetchSubmissions()
   }, [])
 
@@ -143,15 +150,12 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold">Sample Clearance Requests</h1>
-        </div>
-      </div>
-      <MetricsCards metrics={metrics} />
-
-      <div className="bg-white rounded-lg shadow">
-        <div className="bg-white rounded-lg shadow">
+  <div className="container mx-auto max-w-6xl">
+    <div className="flex justify-between items-center mb-8">
+      <h1 className="text-2xl font-bold">Sample Clearance Requests</h1>
+    </div>
+    <MetricsCards metrics={metrics} />
+    <div className="bg-white rounded-lg shadow">
           <div className="p-4 flex justify-between items-center border-b">
             <input
               type="text"
@@ -213,7 +217,7 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {filteredSubmissions.map((submission, index) => (
+                {filteredSubmissions.map((submission: Submission, index: number) => (
                   <tr key={`submission-${index}`} className="border-b hover:bg-gray-50">
                     <td className="p-4">{submission.originalSong || 'N/A'}</td>
                     <td className="p-4">{submission.originalArtist || 'N/A'}</td>
@@ -239,88 +243,13 @@ export default function AdminDashboard() {
                         className="flex items-center gap-2"
                         onClick={() => {
                           setSelectedSubmissionId(submission.id)
+                          setSelectedRequest(submission)
                           setIsCommentsOpen(true)
                         }}
                       >
                         <Eye className="h-4 w-4" />
                         View Details
                       </Button>
-                      <Dialog open={isCommentsOpen && selectedSubmissionId === submission.id} onOpenChange={setIsCommentsOpen}>
-                        <DialogContent className="max-w-3xl h-[90vh] flex flex-col overflow-hidden">
-                          <DialogHeader>
-                            <DialogTitle>Request Details</DialogTitle>
-                          </DialogHeader>
-                          <ScrollArea className="flex-1 pr-4 -mr-6">
-                            <Card className="mb-6">
-                              <CardHeader>
-                                <CardTitle className="text-lg">Request Information</CardTitle>
-                              </CardHeader>
-                              <CardContent className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Original Song</p>
-                                  <p>{submission.originalSong}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Original Artist</p>
-                                  <p>{submission.originalArtist}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">New Song</p>
-                                  <p>{submission.newSong}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">New Artist</p>
-                                  <p>{submission.newArtist}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Usage Type</p>
-                                  <p>{submission.usageType}</p>
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-muted-foreground">Distribution</p>
-                                  <p>{submission.distributionType}</p>
-                                </div>
-                              </CardContent>
-                            </Card>
-                            <Card className="mb-6">
-                              <CardHeader>
-                                <CardTitle className="text-lg">Usage Analysis</CardTitle>
-                              </CardHeader>
-                              <CardContent className="space-y-6">
-                                <div>
-                                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Nature of Use</h4>
-                                  <p className="text-sm leading-relaxed">
-                                    {submission.analysis?.usageDescription || "The nature of the use of the original song is as replayed melody line that appears in the choruses of the new work @ 0:35-0:48/0:55-0:58 & 1:56-2:10/2:17-2:20 beneath the new artist's lyrical performance. In effect, the 13-second replay & 3-second 'afterthought' creates a musical structure that represents the melodic hook of the new work."}
-                                  </p>
-                                </div>
-                                <div>
-                                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Artist & Label Background</h4>
-                                  <p className="text-sm leading-relaxed">
-                                    {submission.analysis?.artistBackground || "Artist is signed with a major record label with significant market presence. Commercial potential analysis indicates strong upside based on existing fan base and label's distribution capabilities. Success of the new work will depend on label's ability to promote to the existing fan base."}
-                                  </p>
-                                </div>
-                                <div>
-                                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Recommendation</h4>
-                                  <p className="text-sm leading-relaxed">
-                                    {submission.analysis?.recommendation || "Based on the analysis above, our recommendation is that rights be granted for BMG's copyright interest in the original work in consideration for which BMG would be entitled to receive its pro rata share of an undivided copyright interest in the new work. This recommendation takes into account the nature of use, artist background, and commercial potential of the release."}
-                                  </p>
-                                  <div className="mt-4 p-4 bg-blue-50 rounded-md">
-                                    <p className="text-sm font-semibold text-blue-900">
-                                      System Recommendation: {submission.analysis?.systemRecommendation || "22.5% copyright interest in the new work (i.e., 5.91%) with a 20% floor"}
-                                    </p>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </ScrollArea>
-                          <div className="flex justify-end gap-2 pt-4 border-t mt-auto">
-                            <Button variant="outline" onClick={closeModal}>Close</Button>
-                            <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={handleRejectRequest}>Reject Request</Button>
-                            <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" onClick={handleCounterRequest}>Counter Request</Button>
-                            <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={handleApproveRequest}>Approve Request</Button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
                     </td>
                   </tr>
                 ))}
@@ -329,6 +258,92 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+      <Dialog
+        open={isCommentsOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsCommentsOpen(false);
+            setSelectedSubmissionId("");
+          }
+        }}
+      >
+        <DialogContent className="max-w-3xl h-[90vh] flex flex-col overflow-hidden">
+          <DialogHeader>
+            <DialogTitle>Request Details</DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="flex-1 pr-4 -mr-6">
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-lg">Request Information</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Original Song</p>
+                  <p>{selectedRequest?.originalSong}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Original Artist</p>
+                  <p>{selectedRequest?.originalArtist}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">New Song</p>
+                  <p>{selectedRequest?.newSong}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">New Artist</p>
+                  <p>{selectedRequest?.newArtist}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Usage Type</p>
+                  <p>{selectedRequest?.usageType}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Distribution</p>
+                  <p>{selectedRequest?.distributionType}</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-lg">Usage Analysis</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Nature of Use</h4>
+                  <p className="text-sm leading-relaxed">
+                    {`The nature of the use of ${selectedRequest?.originalSong} by ${selectedRequest?.originalArtist} is as ${selectedRequest?.usageType} that appears throughout the new work "${selectedRequest?.newSong}" by ${selectedRequest?.newArtist}. This creates a musical structure that represents a significant portion of the new work.`}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Artist & Label Background</h4>
+                  <p className="text-sm leading-relaxed">
+                    {`${selectedRequest?.newArtist} is releasing this work through ${formatDistribution(selectedRequest?.distributionType || '')}. The commercial potential will depend on the label's ability to promote to their existing fan base.`}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Recommendation</h4>
+                  <p className="text-sm leading-relaxed">
+                    {`Based on the ${selectedRequest?.usageType} usage and ${formatDistribution(selectedRequest?.distributionType || '')} distribution, we recommend granting rights for the copyright interest in "${selectedRequest?.originalSong}". This takes into account the nature of use and commercial potential of the release.`}
+                  </p>
+                  <div className="mt-4 p-4 bg-blue-50 rounded-md">
+                    <p className="text-sm font-semibold text-blue-900">
+                      System Recommendation: {selectedRequest?.distributionType === "majorLabel" ?
+                        "50% copyright interest in the new work" :
+                        "22.5% copyright interest in the new work with a 20% floor"}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollArea>
+          <div className="flex justify-end gap-2 pt-4 border-t mt-auto">
+            <Button variant="outline" onClick={closeModal}>Close</Button>
+            <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={handleRejectRequest}>Reject Request</Button>
+            <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" onClick={handleCounterRequest}>Counter Request</Button>
+            <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={handleApproveRequest}>Approve Request</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
