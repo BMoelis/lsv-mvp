@@ -46,7 +46,7 @@ export default function Header() {
             <Link href="/" className="text-2xl font-bold">
               Klearance
             </Link>
-            
+
             <div className="hidden md:flex items-center gap-6">
               {Object.entries(navigation).map(([key, section]) => (
                 <div
@@ -59,7 +59,7 @@ export default function Header() {
                     {section.name}
                     <ChevronDown className="h-4 w-4" />
                   </button>
-                  
+
                   {activeDropdown === key && (
                     <div className="absolute left-0 top-full w-48 py-2 bg-white rounded-md shadow-lg border z-50">
                       {section.items.map((item) => (
@@ -75,7 +75,7 @@ export default function Header() {
                   )}
                 </div>
               ))}
-              
+
               <Link href="/pricing" className="text-gray-600 hover:text-gray-900">
                 Pricing
               </Link>

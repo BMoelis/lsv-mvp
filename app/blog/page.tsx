@@ -32,14 +32,14 @@ export default function BlogPage() {
       <h1 className="text-3xl font-bold mb-8">Blog</h1>
 
       <div className="mb-8">
-      <div className="relative max-w-md">
-  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-  <Input 
-    type="search"
-    placeholder="Search articles..."
-    className="pl-9"
-  />
-</div>
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            type="search"
+            placeholder="Search articles..."
+            className="pl-9"
+          />
+        </div>
       </div>
 
       <div className="space-y-6">

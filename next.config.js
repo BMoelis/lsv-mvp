@@ -12,6 +12,7 @@ const nextConfig = {
       'images.ctfassets.net',
       'concord.com',
       'www.marketbeat.com',
+      'lastradaentertainment.com',
       'primarywave.com',
       'www.downtownmusic.com',
       'www.roundhillmusic.com',

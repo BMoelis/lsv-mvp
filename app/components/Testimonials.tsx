@@ -18,15 +18,15 @@ export default function Testimonials() {
               />
               <div>
                 <div className="font-semibold">Larry Moelis</div>
-                <div className="text-sm text-muted-foreground">Music Director at BET Media Group</div>
+                <div className="text-sm text-muted-foreground">President at Lastrada Entertainment Company, Ltd</div>
               </div>
             </div>
             <blockquote className="text-lg italic mb-4">
               "Klearance saved us countless hours in receiving approval to use songs for our seasonal award shows. Gamechanger for music directors and anyone looking to clear a song."
             </blockquote>
             <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/b/bd/BET-2021Logo.svg"
-              alt="BET Media Group Logo"
+              src="http://lastradaentertainment.com/Portals/0/Images/Logo-100-black.jpg?ver=2019-08-22-173127-590"
+              alt="Lastrada Entertainment Company, Ltd"
               width={100}
               height={40}
               className="mt-4"
