@@ -85,11 +85,11 @@ const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(nu
   const [selectedRequestId, setSelectedRequestId] = useState<string>("")
   const getStatusBadge = (status: string) => {
     const statusStyles = {
-      pending: { variant: "warning", label: "Pending" },
-      approved: { variant: "success", label: "Approved" },
+      pending: { variant: "outline", label: "Pending" },
+      approved: { variant: "secondary", label: "Approved" },
       rejected: { variant: "destructive", label: "Rejected" }
     } as const
-    return statusStyles[status as keyof typeof statusStyles]
+    return statusStyles[status as keyof typeof statusStyles] || { variant: "default", label: "New" }
   }
 
   return (
