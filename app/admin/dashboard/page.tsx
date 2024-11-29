@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Eye, MessageSquare } from 'lucide-react'
+import { Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useToast } from "@/hooks/use-toast"
 import MetricsCards from '../../components/MetricsCards'
-import { AdminCommentsDialog } from "@/components/ui/admin-comments-dialog"
-import { RequestActionsDialog } from "@/components/ui/request-actions-dialog"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -36,45 +36,39 @@ export default function AdminDashboard() {
   const [error, setError] = useState("")
   const [isCommentsOpen, setIsCommentsOpen] = useState(false)
   const [selectedSubmissionId, setSelectedSubmissionId] = useState<string>("")
-  const [isActionsOpen, setIsActionsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredSubmissions, setFilteredSubmissions] = useState(submissions)
-  const [sortConfig, setSortConfig] = useState<{
-    field: string;
-    direction: "asc" | "desc";
-  }>({ field: "", direction: "asc" });
+  const [sortConfig, setSortConfig] = useState<{ field: string; direction: "asc" | "desc"; }>({ field: "", direction: "asc" })
   const [selectedRequest, setSelectedRequest] = useState<Submission | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const [isCountering, setIsCountering] = useState(false)
+  const [counterOffer, setCounterOffer] = useState("")
+  const { toast } = useToast()
   const closeModal = () => {
-    setIsCommentsOpen(false);
-    setSelectedSubmissionId("");
-  };
+    setIsCommentsOpen(false)
+    setSelectedSubmissionId("")
+    setIsCountering(false)
+  }
 
   const handleRejectRequest = () => {
-    console.log("Rejecting request:", selectedSubmissionId);
-    closeModal();
-  };
+    console.log("Rejecting request:", selectedSubmissionId)
+    closeModal()
+  }
 
   const handleCounterRequest = () => {
-    console.log("Countering request:", selectedSubmissionId);
-    closeModal();
-  };
+    setIsCountering(true)
+  }
 
   const handleApproveRequest = () => {
-    console.log("Approving request:", selectedSubmissionId);
-    closeModal();
-  };
+    console.log("Approving request:", selectedSubmissionId)
+    closeModal()
+  }
 
-  const metrics = {
-    totalRequests: 156,
-    totalChange: 12,
-    pendingReview: 23,
-    pendingChange: -5,
-    approved: 89,
-    approvedChange: 18,
-    averageTime: 3.2,
-    timeComparison: "Faster than last month"
+  const formatDistribution = (text: string) => {
+    return text?.replace(/([A-Z])/g, ' $1')
+      .trim()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
   }
 
   const formatText = (text: string) => {
@@ -86,7 +80,6 @@ export default function AdminDashboard() {
       setFilteredSubmissions(submissions)
       return
     }
-
     const filtered = submissions.filter(submission =>
       submission.originalSong.toLowerCase().includes(term.toLowerCase()) ||
       submission.originalArtist.toLowerCase().includes(term.toLowerCase()) ||
@@ -95,13 +88,6 @@ export default function AdminDashboard() {
     )
     setFilteredSubmissions(filtered)
   }
-
-  const formatDistribution = (text: string) => {
-    return text?.replace(/([A-Z])/g, ' $1').trim().split(' ').map(word =>
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ')
-  }
-
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
@@ -110,7 +96,6 @@ export default function AdminDashboard() {
           throw new Error(`Failed to fetch submissions: ${response.status}`)
         }
         const data = await response.json()
-        console.log('Submissions data:', data)
         if (data.submissions) {
           const enhancedSubmissions = data.submissions.map((submission: Submission) => ({
             ...submission,
@@ -118,9 +103,7 @@ export default function AdminDashboard() {
               usageDescription: `The nature of the use of ${submission.originalSong} by ${submission.originalArtist} is as ${submission.usageType} that appears throughout the new work "${submission.newSong}" by ${submission.newArtist}. This creates a musical structure that represents a significant portion of the new work.`,
               artistBackground: `${submission.newArtist} is releasing this work through ${formatDistribution(submission.distributionType)}. The commercial potential will depend on the label's ability to promote to their existing fan base.`,
               recommendation: `Based on the ${submission.usageType} usage and ${formatDistribution(submission.distributionType)} distribution, we recommend granting rights for the copyright interest in "${submission.originalSong}". This takes into account the nature of use and commercial potential of the release.`,
-              systemRecommendation: submission.distributionType === "majorLabel" ?
-                "50% copyright interest in the new work" :
-                "22.5% copyright interest in the new work with a 20% floor"
+              systemRecommendation: submission.distributionType === "majorLabel" ? "50% copyright interest in the new work" : "22.5% copyright interest in the new work with a 20% floor"
             }
           }))
           setSubmissions(enhancedSubmissions)
@@ -135,11 +118,9 @@ export default function AdminDashboard() {
     fetchSubmissions()
   }, [])
 
-  // Add this as a separate useEffect
   useEffect(() => {
     setFilteredSubmissions(submissions)
   }, [submissions])
-
   if (loading) return <div className="p-8">Loading submissions...</div>
   if (error) return (
     <div className="p-8">
@@ -150,12 +131,21 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-  <div className="container mx-auto max-w-6xl">
-    <div className="flex justify-between items-center mb-8">
-      <h1 className="text-2xl font-bold">Sample Clearance Requests</h1>
-    </div>
-    <MetricsCards metrics={metrics} />
-    <div className="bg-white rounded-lg shadow">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold">Sample Clearance Requests</h1>
+        </div>
+        <MetricsCards metrics={{
+          totalRequests: 156,
+          totalChange: 12,
+          pendingReview: 23,
+          pendingChange: -5,
+          approved: 89,
+          approvedChange: 18,
+          averageTime: 3.2,
+          timeComparison: "Faster than last month"
+        }} />
+        <div className="bg-white rounded-lg shadow">
           <div className="p-4 flex justify-between items-center border-b">
             <input
               type="text"
@@ -171,25 +161,22 @@ export default function AdminDashboard() {
               className="border rounded-md px-3 py-2"
               value={`${sortConfig.field}-${sortConfig.direction}`}
               onChange={(e) => {
-                const [field, direction] = e.target.value.split('-');
-                setSortConfig({ field, direction: direction as "asc" | "desc" });
-
+                const [field, direction] = e.target.value.split('-')
+                setSortConfig({ field, direction: direction as "asc" | "desc" })
                 const sorted = [...filteredSubmissions].sort((a, b) => {
-                  let comparison = 0;
-
+                  let comparison = 0
                   if (field === 'date') {
-                    comparison = new Date(a._date).getTime() - new Date(b._date).getTime();
+                    comparison = new Date(a._date).getTime() - new Date(b._date).getTime()
                   }
                   if (field === 'status') {
-                    comparison = (a.status || 'new').localeCompare(b.status || 'new');
+                    comparison = (a.status || 'new').localeCompare(b.status || 'new')
                   }
                   if (field === 'artist') {
-                    comparison = a.originalArtist.localeCompare(b.originalArtist);
+                    comparison = a.originalArtist.localeCompare(b.originalArtist)
                   }
-
-                  return direction === "asc" ? comparison : -comparison;
-                });
-                setFilteredSubmissions(sorted);
+                  return direction === "asc" ? comparison : -comparison
+                })
+                setFilteredSubmissions(sorted)
               }}
             >
               <option value="">Select sort type</option>
@@ -258,90 +245,151 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-      <Dialog
-        open={isCommentsOpen}
-        onOpenChange={(open) => {
-          if (!open) {
-            setIsCommentsOpen(false);
-            setSelectedSubmissionId("");
-          }
-        }}
-      >
+
+      <Dialog open={isCommentsOpen} onOpenChange={(open) => {
+        if (!open) {
+          closeModal()
+        }
+      }}>
         <DialogContent className="max-w-3xl h-[90vh] flex flex-col overflow-hidden">
           <DialogHeader>
-            <DialogTitle>Request Details</DialogTitle>
+            <DialogTitle>{isCountering ? "Counter Offer" : "Request Details"}</DialogTitle>
           </DialogHeader>
-          <ScrollArea className="flex-1 pr-4 -mr-6">
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Request Information</CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Original Song</p>
-                  <p>{selectedRequest?.originalSong}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Original Artist</p>
-                  <p>{selectedRequest?.originalArtist}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">New Song</p>
-                  <p>{selectedRequest?.newSong}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">New Artist</p>
-                  <p>{selectedRequest?.newArtist}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Usage Type</p>
-                  <p>{selectedRequest?.usageType}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Distribution</p>
-                  <p>{selectedRequest?.distributionType}</p>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Usage Analysis</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Nature of Use</h4>
-                  <p className="text-sm leading-relaxed">
-                    {`The nature of the use of ${selectedRequest?.originalSong} by ${selectedRequest?.originalArtist} is as ${selectedRequest?.usageType} that appears throughout the new work "${selectedRequest?.newSong}" by ${selectedRequest?.newArtist}. This creates a musical structure that represents a significant portion of the new work.`}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Artist & Label Background</h4>
-                  <p className="text-sm leading-relaxed">
-                    {`${selectedRequest?.newArtist} is releasing this work through ${formatDistribution(selectedRequest?.distributionType || '')}. The commercial potential will depend on the label's ability to promote to their existing fan base.`}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground mb-2">Recommendation</h4>
-                  <p className="text-sm leading-relaxed">
-                    {`Based on the ${selectedRequest?.usageType} usage and ${formatDistribution(selectedRequest?.distributionType || '')} distribution, we recommend granting rights for the copyright interest in "${selectedRequest?.originalSong}". This takes into account the nature of use and commercial potential of the release.`}
-                  </p>
-                  <div className="mt-4 p-4 bg-blue-50 rounded-md">
-                    <p className="text-sm font-semibold text-blue-900">
-                      System Recommendation: {selectedRequest?.distributionType === "majorLabel" ?
-                        "50% copyright interest in the new work" :
-                        "22.5% copyright interest in the new work with a 20% floor"}
+          {!isCountering ? (
+            <ScrollArea className="flex-1 pr-4 -mr-6">
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">Request Information</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Original Song</p>
+                    <p>{selectedRequest?.originalSong}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Original Artist</p>
+                    <p>{selectedRequest?.originalArtist}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">New Song</p>
+                    <p>{selectedRequest?.newSong}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">New Artist</p>
+                    <p>{selectedRequest?.newArtist}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Usage Type</p>
+                    <p>{selectedRequest?.usageType}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Distribution</p>
+                    <p>{selectedRequest?.distributionType}</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">Usage Analysis</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h3 className="font-medium mb-1">Usage Description</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedRequest?.analysis.usageDescription}
                     </p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </ScrollArea>
-          <div className="flex justify-end gap-2 pt-4 border-t mt-auto">
-            <Button variant="outline" onClick={closeModal}>Close</Button>
-            <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={handleRejectRequest}>Reject Request</Button>
-            <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" onClick={handleCounterRequest}>Counter Request</Button>
-            <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={handleApproveRequest}>Approve Request</Button>
-          </div>
+                  <div>
+                    <h3 className="font-medium mb-1">Artist Background</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedRequest?.analysis.artistBackground}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-1">Recommendation</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedRequest?.analysis.recommendation}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-1">System Recommendation</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedRequest?.analysis.systemRecommendation}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              <div className="flex justify-end gap-2 pt-4 border-t mt-auto">
+                <Button variant="outline" onClick={closeModal}>Close</Button>
+                <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={handleRejectRequest}>
+                  Reject Request
+                </Button>
+                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" onClick={handleCounterRequest}>
+                  Counter Request
+                </Button>
+                <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={handleApproveRequest}>
+                  Approve Request
+                </Button>
+              </div>
+            </ScrollArea>
+          ) : (
+            <div className="space-y-4">
+              <div className="p-4 rounded-lg bg-gray-50">
+                <h3 className="font-medium mb-2">System Recommendation</h3>
+                <p className="text-sm font-semibold text-blue-900">
+                  {selectedRequest?.distributionType === "majorLabel"
+                    ? "50% copyright interest in the new work"
+                    : "22.5% copyright interest in the new work with a 20% floor"}
+                </p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Counter Offer Percentage</label>
+                <Input
+                  type="number"
+                  value={counterOffer}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCounterOffer(e.target.value)}
+                  placeholder="Enter percentage (e.g., 25)"
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setIsCountering(false)}>
+                  Back
+                </Button>
+                <Button onClick={async () => {
+                  if (!counterOffer) {
+                    toast({
+                      title: "Error",
+                      description: "Please enter a counter offer percentage",
+                      variant: "destructive",
+                    })
+                    return
+                  }
+
+                  const response = await fetch(`/api/submissions/${selectedSubmissionId}`, {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      status: 'counter',
+                      counterOffer
+                    })
+                  })
+
+                  if (response.ok) {
+                    toast({
+                      title: "Success",
+                      description: "Counter offer sent successfully",
+                    })
+                    setIsCountering(false)
+                    setIsCommentsOpen(false)
+                  }
+                }}>
+                  Send Counter Offer
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
