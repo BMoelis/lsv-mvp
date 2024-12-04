@@ -9,14 +9,14 @@ export default function RequestTypePage() {
       <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link href="/request/sampling">
           <div className="bg-white p-8 rounded-lg shadow hover:shadow-md transition-shadow">
-            <h2 className="text-xl font-bold mb-4">Sampling & Interpolation Rights</h2>
+            <h2 className="text-xl font-bold mb-4">Sampling & Interpolation</h2>
             <p className="text-gray-600">Request clearance for using portions of existing songs</p>
           </div>
         </Link>
         <Link href="/sample-request">
           <div className="bg-white p-8 rounded-lg shadow hover:shadow-md transition-shadow">
-            <h2 className="text-xl font-bold mb-4">Synchronization Rights</h2>
-            <p className="text-gray-600">Request clearance for using music in video content</p>
+            <h2 className="text-xl font-bold mb-4">Synchronization Usage</h2>
+            <p className="text-gray-600">Request clearance for using music in audiovisual content</p>
           </div>
         </Link>
       </div>

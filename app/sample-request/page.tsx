@@ -21,7 +21,7 @@ export default function SampleRequestForm() {
       <h1 className="text-2xl font-bold text-center mb-8">Interpolation Request Form</h1>
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
         <h2 className="text-xl font-bold mb-6">Music Interpolation Request</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -34,7 +34,7 @@ export default function SampleRequestForm() {
                 className="w-full p-2 border rounded-md"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium mb-2">Original Artist</label>
               <input
@@ -58,7 +58,7 @@ export default function SampleRequestForm() {
                 className="w-full p-2 border rounded-md"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium mb-2">New Artist</label>
               <input
@@ -82,7 +82,7 @@ export default function SampleRequestForm() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium mb-2">Usage Type</label>
             <select 
               name="usageType"
@@ -93,11 +93,11 @@ export default function SampleRequestForm() {
               <option value="sample">Sample</option>
               <option value="interpolation">Interpolation</option>
             </select>
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium mb-2">Distribution Type</label>
-            <select 
+            <select
               name="distributionType"
               required
               className="w-full p-2 border rounded-md"
@@ -131,12 +131,20 @@ export default function SampleRequestForm() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Additional Notes</label>
-            <textarea
-              name="notes"
-              placeholder="Enter any additional notes or comments"
-              rows={4}
-              className="w-full p-2 border rounded-md"
-            ></textarea>
+            <div className="space-y-2">
+              <textarea
+                name="notes"
+                placeholder="Enter any additional notes or comments on the nature of the usage."
+                rows={4}
+                className="w-full p-2 border rounded-md"
+              ></textarea>
+              <p className="text-sm text-gray-500">
+                For example:
+                <em className="block mt-1">
+                  The use of the original song is as a replayed melody line that appears in the choruses of the new work at 0:27-0:40/0:43-0:50 and 1:53-2:09/2:14-2:22 beneath the new artist's lyrical performance.
+                </em>
+              </p>
+            </div>
           </div>
 
           <button
