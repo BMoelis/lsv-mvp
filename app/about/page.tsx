@@ -24,16 +24,16 @@ const advisoryBoard = [
     image: "/images/team/deborah-mannis-gardner.jpg"
   },
   {
-    name: "Laurent Hubert",
+    name: "TBD",
     role: "Advisory Board Member",
-    bio: "Experienced music industry executive with expertise in rights management",
-    image: "/images/team/laurent-hubert.jpg"
+    bio: "Leading music clearance expert and founder of DMG Clearances",
+    image: "/images/team/deborah-mannis-gardner.jpg"
   },
   {
-    name: "Gregg Latterman",
+    name: "TBD",
     role: "Advisory Board Member",
-    bio: "Professor of Entrepreneurship and former music industry executive",
-    image: "/images/team/gregg-latterman.jpg"
+    bio: "Leading music clearance expert and founder of DMG Clearances",
+    image: "/images/team/deborah-mannis-gardner.jpg"
   },
   {
     name: "Pierre Mossiat",
