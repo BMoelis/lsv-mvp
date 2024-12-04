@@ -96,7 +96,7 @@ const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(nu
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Track and manage your sample clearance requests</h1>
-        <Link href="/sample-request">
+        <Link href="/request">
           <Button className="flex items-center gap-2">
             <Plus className="h-4 w-4" /> New Request
           </Button>

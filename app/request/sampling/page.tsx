@@ -13,7 +13,7 @@ export default function SamplingTypePage() {
             <p className="text-gray-600">Using a portion of the master recording</p>
           </div>
         </Link>
-        <Link href="/request/sampling/interpolation">
+        <Link href="/sample-request">
           <div className="bg-white p-8 rounded-lg shadow hover:shadow-md transition-shadow">
             <h2 className="text-xl font-bold mb-4">Interpolation</h2>
             <p className="text-gray-600">Re-recording elements of the composition</p>

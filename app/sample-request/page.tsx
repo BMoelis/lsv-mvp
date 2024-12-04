@@ -10,7 +10,7 @@ export default function SampleRequestForm() {
       <div className="min-h-screen bg-gray-50 p-8 flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-sm max-w-md w-full">
           <h2 className="text-2xl font-bold text-center mb-4">Thank you!</h2>
-          <p className="text-center text-gray-600">Your sample request has been submitted successfully.</p>
+          <p className="text-center text-gray-600">Your interpolation request has been submitted successfully.</p>
         </div>
       </div>
     )
@@ -18,9 +18,9 @@ export default function SampleRequestForm() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-2xl font-bold text-center mb-8">Sample Request Form</h1>
+      <h1 className="text-2xl font-bold text-center mb-8">Interpolation Request Form</h1>
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
-        <h2 className="text-xl font-bold mb-6">Music Sample Request</h2>
+        <h2 className="text-xl font-bold mb-6">Music Interpolation Request</h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

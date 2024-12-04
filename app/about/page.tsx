@@ -9,10 +9,10 @@ const teamMembers = [
     image: "/images/team/ben-moelis.jpg"
   },
   {
-    name: "Stuart Baker",
+    name: "Myles Novick",
     role: "CTO/CPO & Co-founder",
-    bio: "Experienced software engineering leader, formerly Amazon & Comulate",
-    image: "/images/team/stuart-baker.jpg"
+    bio: "Engineering leader with 7+ years of experience, formerly Palantir",
+    image: "/images/team/myles-novick.jpg"
   }
 ]
 
@@ -71,12 +71,13 @@ export default function AboutPage() {
             <Card key={index}>
               <CardContent className="p-6">
                 {member.image && (
-                  <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+                  <div className="relative w-full h-64 mb-4 rounded-lg overflow-hidden">
                     <Image
                       src={member.image}
                       alt={member.name}
                       fill
                       className="object-cover"
+                      style={{ objectPosition: '50% 20%' }}
                       priority
                     />
                   </div>
@@ -97,18 +98,16 @@ export default function AboutPage() {
             <Card key={index}>
               <CardContent className="p-6">
                 {member.image && (
-                  <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    width={400}
-                    height={400}
-                    quality={90}
-                    className="object-cover object-center w-full h-full rounded-lg"
-                    style={{ objectPosition: '50% 30%' }}  // This moves focus up to the face
-                    priority
-                  />
-                </div>
+                  <div className="relative w-full h-64 mb-4 rounded-lg overflow-hidden">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      style={{ objectPosition: '50% 20%' }}
+                      priority
+                    />
+                  </div>
                 )}
                 <h3 className="font-semibold mb-1">{member.name}</h3>
                 <p className="text-sm text-gray-500 mb-2">{member.role}</p>
