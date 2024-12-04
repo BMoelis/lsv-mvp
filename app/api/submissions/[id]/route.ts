@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     const body = await request.json()
     const { status, counterOffer } = body
 
-    const response = await fetch(`https://formspree.io/api/0/forms/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}/submissions/${params.id}`, {
+    const response = await fetch(`https://formspree.io/api/0/forms/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}/submissions/${context.params.id}`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${process.env.NEXT_PUBLIC_FORMSPREE_API_KEY}`,
@@ -37,11 +37,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     const response = await fetch(
-      `https://formspree.io/api/0/forms/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}/submissions/${params.id}`,
+      `https://formspree.io/api/0/forms/${process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID}/submissions/${context.params.id}`,
       {
         method: 'DELETE',
         headers: {
