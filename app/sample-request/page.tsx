@@ -75,7 +75,7 @@ export default function SampleRequestForm() {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <h1 className="text-2xl font-bold text-center mb-8">Interpolation Request Form</h1>
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
+      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-8">
         <h2 className="text-xl font-bold mb-6">Music Interpolation Request</h2>
 
         <form onSubmit={handleFormSubmit} className="space-y-6">

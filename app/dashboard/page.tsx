@@ -2,9 +2,15 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { CommentsDialog } from "@/components/ui/comments-dialog"
-import { RequestActionsDialog } from "@/components/ui/request-actions-dialog"
+import { RequestStatusModal } from "@/components/ui/request-status-modal"
 import { Input } from "@/components/ui/input"
+
+interface RequestUpdate {
+  type: "System" | "Admin"
+  message: string
+  status: string
+  timestamp: Date
+}
 
 interface RequestDetails {
   id: string
@@ -14,11 +20,11 @@ interface RequestDetails {
   newArtist: string
   usageType: string
   distributionType: string
-  status: string
-  comments: number
-  _date: string
+  status: "pending" | "approved" | "rejected"
   email: string
-  notes: string
+  date: Date
+  notes?: string
+  updates: RequestUpdate[]
 }
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -26,7 +32,7 @@ import { Badge } from "@/components/ui/badge"
 import { Eye, Plus, Clock, CheckCircle, XCircle, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 
-const mockUserRequests = [
+const mockUserRequests: RequestDetails[] = [
   {
     id: "1",
     originalSong: "California Love",
@@ -35,11 +41,24 @@ const mockUserRequests = [
     newArtist: "Melanie Moelis",
     usageType: "Sample",
     distributionType: "Independent Label",
-    _date: "2024-01-19",
+    date: new Date("2024-01-19"),
     status: "pending",
-    comments: 2,
     email: "melanie@example.com",
-    notes: "Planning to use the main hook for chorus"
+    notes: "Planning to use the main hook for chorus",
+    updates: [
+      {
+        type: "System",
+        message: "Request received and under review",
+        status: "Pending",
+        timestamp: new Date("2024-12-05")
+      },
+      {
+        type: "Admin",
+        message: "Additional information needed regarding usage context",
+        status: "Awaiting Response",
+        timestamp: new Date("2024-12-05")
+      }
+    ]
   },
   {
     id: "2",
@@ -49,11 +68,18 @@ const mockUserRequests = [
     newArtist: "Melanie Moelis",
     usageType: "Sample",
     distributionType: "Independent Label",
-    _date: "2024-01-15",
+    date: new Date("2024-01-15"),
     status: "approved",
-    comments: 4,
     email: "melanie@example.com",
-    notes: "Using synth progression in bridge section"
+    notes: "Using synth progression in bridge section",
+    updates: [
+      {
+        type: "System",
+        message: "Request approved",
+        status: "Approved",
+        timestamp: new Date("2024-12-04")
+      }
+    ]
   },
   {
     id: "3",
@@ -63,11 +89,18 @@ const mockUserRequests = [
     newArtist: "Melanie Moelis",
     usageType: "Sample",
     distributionType: "Independent Label",
-    _date: "2024-01-10",
+    date: new Date("2024-01-10"),
     status: "rejected",
-    comments: 1,
     email: "melanie@example.com",
-    notes: "Incorporating main synth riff throughout"
+    notes: "Incorporating main synth riff throughout",
+    updates: [
+      {
+        type: "Admin",
+        message: "Request rejected due to licensing restrictions",
+        status: "Rejected",
+        timestamp: new Date("2024-12-03")
+      }
+    ]
   }
 ]
 
@@ -79,14 +112,12 @@ const stats = [
 ]
 
 export default function RequestorDashboard() {
-  const [isCommentsOpen, setIsCommentsOpen] = useState(false)
-  const [isActionsOpen, setIsActionsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(null)
-  const [selectedRequestId, setSelectedRequestId] = useState<string>("")
   const getStatusBadge = (status: string) => {
     const statusStyles = {
-      pending: { variant: "outline", label: "Pending" },
-      approved: { variant: "secondary", label: "Approved" },
+      pending: { variant: "warning", label: "Pending" },
+      approved: { variant: "success", label: "Approved" },
       rejected: { variant: "destructive", label: "Rejected" }
     } as const
     return statusStyles[status as keyof typeof statusStyles] || { variant: "default", label: "New" }
@@ -134,8 +165,7 @@ export default function RequestorDashboard() {
               <TableHead>Distribution</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Comments</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>View Latest Update</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -147,7 +177,7 @@ export default function RequestorDashboard() {
                 <TableCell>{request.newArtist}</TableCell>
                 <TableCell>{request.usageType}</TableCell>
                 <TableCell>{request.distributionType}</TableCell>
-                <TableCell>{new Date(request._date).toLocaleDateString()}</TableCell>
+                <TableCell>{request.date.toLocaleDateString()}</TableCell>
                 <TableCell>
                   <Badge variant={getStatusBadge(request.status)?.variant}>
                     {getStatusBadge(request.status)?.label}
@@ -157,40 +187,19 @@ export default function RequestorDashboard() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="flex items-center gap-1"
-                    onClick={() => {
-                      setSelectedRequestId(request.id)
-                      setIsCommentsOpen(true)
-                    }}
-                  >
-                    <MessageSquare className="h-4 w-4 text-gray-400" />
-                    <span>{request.comments}</span>
-                  </Button>
-                  {selectedRequestId === request.id && (
-                    <CommentsDialog
-                      isOpen={isCommentsOpen}
-                      setIsOpen={setIsCommentsOpen}
-                      requestId={selectedRequestId}
-                    />
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="sm"
                     className="flex items-center gap-2"
                     onClick={() => {
                       setSelectedRequest(request)
-                      setIsActionsOpen(true)
+                      setIsOpen(true)
                     }}
                   >
                     <Eye className="h-4 w-4" />
                     View
                   </Button>
                   {selectedRequest && (
-                    <RequestActionsDialog
-                      isOpen={isActionsOpen}
-                      setIsOpen={setIsActionsOpen}
+                    <RequestStatusModal
+                      isOpen={isOpen}
+                      onClose={() => setIsOpen(false)}
                       request={selectedRequest}
                     />
                   )}
