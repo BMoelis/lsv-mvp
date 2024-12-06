@@ -81,7 +81,7 @@ const stats = [
 export default function RequestorDashboard() {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false)
   const [isActionsOpen, setIsActionsOpen] = useState(false)
-const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(null)
+  const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(null)
   const [selectedRequestId, setSelectedRequestId] = useState<string>("")
   const getStatusBadge = (status: string) => {
     const statusStyles = {
@@ -154,9 +154,9 @@ const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(nu
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="flex items-center gap-1"
                     onClick={() => {
                       setSelectedRequestId(request.id)
@@ -175,26 +175,26 @@ const [selectedRequest, setSelectedRequest] = useState<RequestDetails | null>(nu
                   )}
                 </TableCell>
                 <TableCell>
-  <Button 
-    variant="ghost" 
-    size="sm" 
-    className="flex items-center gap-2"
-    onClick={() => {
-      setSelectedRequest(request)
-      setIsActionsOpen(true)
-    }}
-  >
-    <Eye className="h-4 w-4" />
-    View
-  </Button>
-  {selectedRequest && (
-    <RequestActionsDialog
-      isOpen={isActionsOpen}
-      setIsOpen={setIsActionsOpen}
-      request={selectedRequest}
-    />
-  )}
-</TableCell>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-2"
+                    onClick={() => {
+                      setSelectedRequest(request)
+                      setIsActionsOpen(true)
+                    }}
+                  >
+                    <Eye className="h-4 w-4" />
+                    View
+                  </Button>
+                  {selectedRequest && (
+                    <RequestActionsDialog
+                      isOpen={isActionsOpen}
+                      setIsOpen={setIsActionsOpen}
+                      request={selectedRequest}
+                    />
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

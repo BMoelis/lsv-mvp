@@ -33,7 +33,7 @@ export function CommentsDialog({
       timestamp: new Date(),
       content: 'Request received and under review',
       type: 'system',
-      status: 'pending'
+      status: 'Pending'
     },
     {
       id: '2',
@@ -41,7 +41,7 @@ export function CommentsDialog({
       timestamp: new Date(),
       content: 'Additional information needed regarding usage context',
       type: 'admin',
-      status: 'awaiting response'
+      status: 'Awaiting Response'
     }
   ]
 
