@@ -311,9 +311,9 @@ export default function AdminDashboard() {
                       {selectedRequest?.analysis.recommendation}
                     </p>
                   </div>
-                  <div>
-                    <h3 className="font-medium mb-1">System Recommendation</h3>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 className="font-medium mb-2 text-blue-900">AI-Generated Quote</h3>
+                    <p className="text-sm font-semibold text-blue-900">
                       {selectedRequest?.analysis.systemRecommendation}
                     </p>
                   </div>
