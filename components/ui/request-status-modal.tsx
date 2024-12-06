@@ -49,41 +49,59 @@ export function RequestStatusModal({ isOpen, onClose, request }: RequestStatusMo
                     <DialogTitle>Request Status</DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-6">
-                    <div>
-                        <h3 className="text-lg font-semibold mb-4">Request Information</h3>
-                        <div className="grid grid-cols-2 gap-y-4">
-                            <div className="font-medium">Original Song</div>
-                            <div>{request.originalSong}</div>
-                            <div className="font-medium">Original Artist</div>
-                            <div>{request.originalArtist}</div>
-                            <div className="font-medium">New Song</div>
-                            <div>{request.newSong}</div>
-                            <div className="font-medium">New Artist</div>
-                            <div>{request.newArtist}</div>
-                            <div className="font-medium">Usage Type</div>
-                            <div>{request.usageType}</div>
-                            <div className="font-medium">Distribution</div>
-                            <div>{request.distributionType}</div>
-                            <div className="font-medium">Email</div>
-                            <div>{request.email}</div>
-                            <div className="font-medium">Date</div>
-                            <div>{format(request.date, "MM/dd/yyyy")}</div>
-                            <div className="font-medium">Status</div>
-                            <div>
-                                <Badge
-                                    variant={
-                                        request.status === "approved"
-                                            ? "success"
-                                            : request.status === "rejected"
-                                                ? "destructive"
-                                                : request.status === "pending"
-                                                    ? "warning"
-                                                    : "default"
-                                    }
-                                >
-                                    {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                                </Badge>
+                <div className="grid gap-6">
+                    <div className="space-y-6">
+                        <div className="space-y-4">
+                            <h3 className="text-lg font-semibold">Song Information</h3>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm bg-gray-50 p-4 rounded-lg">
+                                <div className="font-medium">Original Song</div>
+                                <div>{request.originalSong}</div>
+                                <div className="font-medium">Original Artist</div>
+                                <div>{request.originalArtist}</div>
+                                <div className="font-medium">New Song</div>
+                                <div>{request.newSong}</div>
+                                <div className="font-medium">New Artist</div>
+                                <div>{request.newArtist}</div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-lg font-semibold">Usage Details</h3>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm bg-gray-50 p-4 rounded-lg">
+                                <div className="font-medium">Usage Type</div>
+                                <div>{request.usageType}</div>
+                                <div className="font-medium">Distribution</div>
+                                <div>{request.distributionType}</div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-lg font-semibold">Request Details</h3>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm bg-gray-50 p-4 rounded-lg">
+                                <div className="font-medium">Email</div>
+                                <div>{request.email}</div>
+                                <div className="font-medium">Date</div>
+                                <div>{format(request.date, "MM/dd/yyyy")}</div>
+                                <div className="font-medium">Status</div>
+                                <div className="flex items-center gap-2">
+                                    <Badge
+                                        variant={
+                                            request.status === "approved"
+                                                ? "success"
+                                                : request.status === "rejected"
+                                                    ? "destructive"
+                                                    : "warning"
+                                        }
+                                        className="px-3 py-1 text-sm"
+                                    >
+                                        {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                                    </Badge>
+                                    {request.status === "pending" && (
+                                        <span className="text-xs text-gray-500">
+                                            Estimated response: 48h
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -99,24 +117,36 @@ export function RequestStatusModal({ isOpen, onClose, request }: RequestStatusMo
 
                     <Separator />
 
-                    <div>
-                        <div className="flex items-center gap-2 mb-4">
-                            <MessageSquare className="h-5 w-5" />
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2">
+                            <MessageSquare className="h-5 w-5 text-gray-600" />
                             <h3 className="text-lg font-semibold">Updates</h3>
                         </div>
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                             {request.updates.map((update, index) => (
-                                <div key={index} className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <div className="font-medium">{update.type}</div>
+                                <div key={index} className="relative">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="font-medium text-gray-700">{update.type}</div>
                                         <div className="text-sm text-gray-500">
                                             {format(update.timestamp, "MM/dd/yyyy")}
                                         </div>
                                     </div>
                                     <div className="bg-gray-50 p-4 rounded-lg">
-                                        <p>{update.message}</p>
-                                        <p className="text-blue-500 mt-2">Status: {update.status}</p>
+                                        <p className="text-gray-800">{update.message}</p>
+                                        <div className="mt-3 text-sm">
+                                            <span className="text-gray-600">Status: </span>
+                                            <span className={`font-medium ${update.status.toLowerCase() === "pending" ? "text-yellow-600" :
+                                                    update.status.toLowerCase() === "approved" ? "text-green-600" :
+                                                        update.status.toLowerCase() === "rejected" ? "text-red-600" :
+                                                            "text-blue-600"
+                                                }`}>
+                                                {update.status}
+                                            </span>
+                                        </div>
                                     </div>
+                                    {index < request.updates.length - 1 && (
+                                        <div className="absolute left-4 top-full w-0.5 h-4 bg-gray-200" />
+                                    )}
                                 </div>
                             ))}
                         </div>
