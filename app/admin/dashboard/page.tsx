@@ -251,85 +251,89 @@ export default function AdminDashboard() {
           closeModal()
         }
       }}>
-        <DialogContent className="max-w-3xl h-[90vh] flex flex-col overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>{isCountering ? "Counter Offer" : "Request Details"}</DialogTitle>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-6">
+          <DialogHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-xl font-semibold">
+                {isCountering ? "Counter Offer" : "Request Details"}
+              </DialogTitle>
+            </div>
           </DialogHeader>
           {!isCountering ? (
             <ScrollArea className="flex-1 pr-4 -mr-6">
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="text-lg">Request Information</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Original Song</p>
-                    <p>{selectedRequest?.originalSong}</p>
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Request Information</h3>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-4 bg-gray-50 p-4 rounded-lg">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Original Song</p>
+                      <p className="mt-1">{selectedRequest?.originalSong}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Original Artist</p>
+                      <p className="mt-1">{selectedRequest?.originalArtist}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">New Song</p>
+                      <p className="mt-1">{selectedRequest?.newSong}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">New Artist</p>
+                      <p className="mt-1">{selectedRequest?.newArtist}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Usage Type</p>
+                      <p className="mt-1">{selectedRequest?.usageType}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Distribution</p>
+                      <p className="mt-1">{selectedRequest?.distributionType}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Original Artist</p>
-                    <p>{selectedRequest?.originalArtist}</p>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Usage Analysis</h3>
+                  <div className="space-y-6">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-gray-900 mb-2">Usage Description</h4>
+                      <p className="text-sm text-gray-600">
+                        {selectedRequest?.analysis.usageDescription}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-gray-900 mb-2">Artist Background</h4>
+                      <p className="text-sm text-gray-600">
+                        {selectedRequest?.analysis.artistBackground}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium text-gray-900 mb-2">Recommendation</h4>
+                      <p className="text-sm text-gray-600">
+                        {selectedRequest?.analysis.recommendation}
+                      </p>
+                    </div>
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                      <h4 className="font-medium text-blue-900 mb-2">AI-Generated Quote</h4>
+                      <p className="text-sm font-semibold text-blue-900">
+                        {selectedRequest?.analysis.systemRecommendation}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">New Song</p>
-                    <p>{selectedRequest?.newSong}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">New Artist</p>
-                    <p>{selectedRequest?.newArtist}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Usage Type</p>
-                    <p>{selectedRequest?.usageType}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Distribution</p>
-                    <p>{selectedRequest?.distributionType}</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle className="text-lg">Usage Analysis</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h3 className="font-medium mb-1">Usage Description</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedRequest?.analysis.usageDescription}
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Artist Background</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedRequest?.analysis.artistBackground}
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Recommendation</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedRequest?.analysis.recommendation}
-                    </p>
-                  </div>
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <h3 className="font-medium mb-2 text-blue-900">AI-Generated Quote</h3>
-                    <p className="text-sm font-semibold text-blue-900">
-                      {selectedRequest?.analysis.systemRecommendation}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-              <div className="flex justify-end gap-2 pt-4 border-t mt-auto">
-                <Button variant="outline" onClick={closeModal}>Close</Button>
-                <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={handleRejectRequest}>
-                  Reject Request
-                </Button>
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" onClick={handleCounterRequest}>
-                  Counter Request
-                </Button>
-                <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={handleApproveRequest}>
-                  Approve Request
-                </Button>
+                </div>
+                <div className="flex justify-end gap-3 pt-6 mt-6 border-t">
+                  <Button variant="outline" onClick={closeModal} className="px-4 py-2">
+                    Close
+                  </Button>
+                  <Button variant="destructive" onClick={handleRejectRequest} className="px-4 py-2">
+                    Reject Request
+                  </Button>
+                  <Button variant="outline" onClick={handleCounterRequest} className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2">
+                    Counter Request
+                  </Button>
+                  <Button variant="outline" onClick={handleApproveRequest} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2">
+                    Approve Request
+                  </Button>
+                </div>
               </div>
             </ScrollArea>
           ) : (
